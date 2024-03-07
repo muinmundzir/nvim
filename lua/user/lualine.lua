@@ -16,18 +16,19 @@ function M.config()
   local diagnostics = {
     "diagnostics",
     sections = { "error", "warn" },
-    colored = false, -- Displays diagnostics status in color if set to true.
+    colored = true, -- Displays diagnostics status in color if set to true.
     always_visible = true, -- Show diagnostics even if there are none.
   }
 
   local filetype = {
     "filetype",
-    colored = false,
+    colored = true,
     icon_only = false,
   }
 
   require("lualine").setup {
     options = {
+      theme='catppuccin',
       -- component_separators = { left = "", right = "" },
       -- section_separators = { left = "", right = "" },
       -- component_separators = { left = "", right = "" },

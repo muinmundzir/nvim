@@ -8,7 +8,7 @@ local M = {
   },
 }
 
-local function lsp_keymaps(bufnr)
+local function lsp_keymaps(client, bufnr)
   local opts = { noremap = true, silent = true }
   local keymap = vim.api.nvim_buf_set_keymap
   keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
@@ -23,10 +23,16 @@ local function lsp_keymaps(bufnr)
   keymap(bufnr, "n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
   keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
   keymap(bufnr, "n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
+
+  -- if client.name == "tsserver" then
+  --   keymap("n", "<leader>rf", ":TypescriptRenameFile<CR>") -- rename file and update imports
+  --   keymap("n", "<leader>oi", ":TypescriptOrganizeImports<CR>") -- organize imports (not in youtube nvim video)
+  --   keymap("n", "<leader>ru", ":TypescriptRemoveUnused<CR>") -- remove unused variables (not in youtube nvim video)
+  -- end
 end
 
 M.on_attach = function(client, bufnr)
-  lsp_keymaps(bufnr)
+  lsp_keymaps(client, bufnr)
 
   if client.supports_method "textDocument/inlayHint" then
     vim.lsp.inlay_hint.enable(bufnr, true)
