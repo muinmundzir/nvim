@@ -109,6 +109,7 @@ function M.config()
     "tailwindcss",
     "eslint",
     "rust_analyzer",
+    "dartls",
     -- "prismals",
   }
 
