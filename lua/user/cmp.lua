@@ -48,7 +48,7 @@ function M.config()
   }
 
   -- vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
-  -- vim.api.nvim_set_hl(1, "CmpItemKindTabnine", { fg = "#CA42F0" })
+  vim.api.nvim_set_hl(1, "CmpItemKindTabnine", { fg = "#CA42F0" })
   vim.api.nvim_set_hl(0, "CmpItemKindCrate", { fg = "#F64D00" })
   vim.api.nvim_set_hl(0, "CmpItemKindEmoji", { fg = "#FDE030" })
 
@@ -227,10 +227,10 @@ function M.config()
         --   vim_item.kind_hl_group = "CmpItemKindCopilot"
         -- end
         --
-        -- if entry.source.name == "cmp_tabnine" then
-        --   vim_item.kind = icons.misc.Robot
-        --   vim_item.kind_hl_group = "CmpItemKindTabnine"
-        -- end
+        if entry.source.name == "cmp_tabnine" then
+          vim_item.kind = icons.misc.Robot
+          vim_item.kind_hl_group = "CmpItemKindTabnine"
+        end
 
         if entry.source.name == "crates" then
           vim_item.kind = icons.misc.Package
@@ -272,7 +272,7 @@ function M.config()
         end,
       },
       { name = "luasnip" },
-      -- { name = "cmp_tabnine" },
+      { name = "cmp_tabnine" },
       { name = "nvim_lua" },
       { name = "buffer" },
       { name = "path" },
