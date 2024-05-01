@@ -99,6 +99,7 @@ function M.config()
     "cssls",
     "html",
     -- "tsserver",
+    "intelephense",
     "astro",
     "pyright",
     "bashls",
