@@ -23,6 +23,8 @@ function M.config()
       o = { "<cmd>tabonly<cr>", "Only" },
       h = { "<cmd>-tabmove<cr>", "Move Left" },
       l = { "<cmd>+tabmove<cr>", "Move Right" },
+      p = { "<cmd>tabp<cr>", "Previous Tab" },
+      f = { "<cmd>tabn<cr>", "Previous Tab" },
     },
     T = { name = "Treesitter" },
   }
