@@ -38,6 +38,9 @@ local M = {
     {
       "roobert/tailwindcss-colorizer-cmp.nvim",
     },
+    {
+      "adoolaard/nvim-cmp-laravel",
+    },
   },
   event = "InsertEnter",
 }
@@ -320,6 +323,7 @@ function M.config()
     -- end
     -- require("cmp").event:off("confirm_done", on_confirm_done)
     -- require("cmp").event:on("confirm_done", on_confirm_done)
+    require("nvim-cmp-laravel").setup()
   end)
 end
 
