@@ -1,11 +1,11 @@
 local M = {
   "nvim-treesitter/nvim-treesitter",
-  -- event = { "BufReadPost", "BufNewFile" },
+  event = { "BufReadPost", "BufNewFile" },
   -- build = ":TSUpdate",
   dependencies = {
     {
       "nvim-treesitter/nvim-treesitter-textobjects",
-      -- event = "VeryLazy",
+      event = "VeryLazy",
     },
   },
 }
@@ -14,6 +14,23 @@ function M.config()
   local wk = require "which-key"
   wk.register {
     ["<leader>Ti"] = { "<cmd>TSConfigInfo<CR>", "Info" },
+  }
+
+  local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+
+  parser_config.blade = {
+    install_info = {
+      url = "https://github.com/EmranMR/tree-sitter-blade",
+      files = { "src/parser.c" },
+      branch = "main",
+    },
+    filetype = "blade",
+  }
+
+  vim.filetype.add {
+    pattern = {
+      [".*%.blade%.php"] = "blade",
+    },
   }
 
   require("nvim-treesitter.configs").setup {
