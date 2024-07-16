@@ -92,6 +92,7 @@ function M.config()
   }
 
   local lspconfig = require "lspconfig"
+  local util = require "lspconfig/util"
   local icons = require "user.icons"
 
   local servers = {
@@ -111,6 +112,7 @@ function M.config()
     "eslint",
     "rust_analyzer",
     "dartls",
+    "gopls",
     -- "prismals",
   }
 
@@ -161,6 +163,29 @@ function M.config()
 
     if server == "lua_ls" then
       require("neodev").setup {}
+    end
+
+    if server == "gopls" then
+      opts.filetypes = {
+        "go",
+        "gomod",
+        "gowork",
+        "gotpml",
+      }
+
+      opts.root_dir = util.root_pattern("go.mod", "go.work", ".git")
+    end
+
+    if server == "emmet_ls" then
+      opts.filetypes = {
+        "html",
+        "css",
+        "sass",
+        "scss",
+        "less",
+        "svelte",
+        "php",
+      }
     end
 
     lspconfig[server].setup(opts)
