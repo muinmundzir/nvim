@@ -1,14 +1,14 @@
 local M = {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
-  dependencies = {
-    {
-      "folke/neodev.nvim",
-    },
-  },
+  -- dependencies = {
+  --   {
+  --     "folke/neodev.nvim",
+  --   },
+  -- },
 }
 
-local function lsp_keymaps(client, bufnr)
+local function lsp_keymaps(bufnr)
   local opts = { noremap = true, silent = true }
   local keymap = vim.api.nvim_buf_set_keymap
   keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
@@ -23,25 +23,18 @@ local function lsp_keymaps(client, bufnr)
   keymap(bufnr, "n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
   keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
   keymap(bufnr, "n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-
-  -- if client.name == "tsserver" then
-  --   keymap("n", "<leader>rf", ":TypescriptRenameFile<CR>") -- rename file and update imports
-  --   keymap("n", "<leader>oi", ":TypescriptOrganizeImports<CR>") -- organize imports (not in youtube nvim video)
-  --   keymap("n", "<leader>ru", ":TypescriptRemoveUnused<CR>") -- remove unused variables (not in youtube nvim video)
-  -- end
 end
 
 M.on_attach = function(client, bufnr)
-  lsp_keymaps(client, bufnr)
+  lsp_keymaps(bufnr)
 
   if client.supports_method "textDocument/inlayHint" then
-    vim.lsp.inlay_hint.enable(bufnr, true)
+    vim.lsp.inlay_hint.enable(true)
   end
 end
 
 M.toggle_inlay_hints = function()
-  local bufnr = vim.api.nvim_get_current_buf()
-  vim.lsp.inlay_hint.enable(bufnr, not vim.lsp.inlay_hint.is_enabled(bufnr))
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
 end
 
 function M.common_capabilities()
@@ -69,30 +62,23 @@ end
 
 function M.config()
   local wk = require "which-key"
-  wk.register {
-    ["<leader>la"] = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
-    ["<leader>lf"] = {
-      "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
-      "Format",
-    },
-    ["<leader>li"] = { "<cmd>LspInfo<cr>", "Info" },
-    ["<leader>lj"] = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
-    ["<leader>lh"] = { "<cmd>lua require('user.lspconfig').toggle_inlay_hints()<cr>", "Hints" },
-    ["<leader>lk"] = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
-    ["<leader>ll"] = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
-    ["<leader>lq"] = { "<cmd>lua vim.diagnostic.setloclist()<cr>", "Quickfix" },
-    ["<leader>lr"] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
+  wk.add {
+    { "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "Code Action" },
+    { "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>", desc = "Format" },
+    { "<leader>lh", "<cmd>lua require('user.lspconfig').toggle_inlay_hints()<cr>", desc = "Hints" },
+    { "<leader>li", "<cmd>LspInfo<cr>", desc = "Info" },
+    { "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic" },
+    { "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic" },
+    { "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens Action" },
+    { "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<cr>", desc = "Quickfix" },
+    { "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "Rename" },
   }
 
-  wk.register {
-    ["<leader>la"] = {
-      name = "LSP",
-      a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action", mode = "v" },
-    },
+  wk.add {
+    { "<leader>laa", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "Code Action", mode = "v" },
   }
 
   local lspconfig = require "lspconfig"
-  local util = require "lspconfig/util"
   local icons = require "user.icons"
 
   local servers = {
@@ -100,30 +86,30 @@ function M.config()
     "cssls",
     "html",
     -- "tsserver",
-    "intelephense",
     "astro",
     "pyright",
+    -- "basedpyright",
     "bashls",
-    "lemminx",
+    -- "lemminx",
     "jsonls",
     "yamlls",
     "marksman",
     "tailwindcss",
     "eslint",
-    "rust_analyzer",
-    "dartls",
+    "taplo",
     "gopls",
-    -- "prismals",
+    "templ",
+    -- "nginx-language-server",
+    -- "rust_analyzer",
   }
 
-  local default_diagnostic_config = {
+  vim.diagnostic.config {
     signs = {
-      active = true,
-      values = {
-        { name = "DiagnosticSignError", text = icons.diagnostics.Error },
-        { name = "DiagnosticSignWarn", text = icons.diagnostics.Warning },
-        { name = "DiagnosticSignHint", text = icons.diagnostics.Hint },
-        { name = "DiagnosticSignInfo", text = icons.diagnostics.Information },
+      text = {
+        [vim.diagnostic.severity.ERROR] = icons.diagnostics.Error,
+        [vim.diagnostic.severity.WARN] = icons.diagnostics.Warning,
+        [vim.diagnostic.severity.HINT] = icons.diagnostics.Hint,
+        [vim.diagnostic.severity.INFO] = icons.diagnostics.Information,
       },
     },
     virtual_text = false,
@@ -134,17 +120,10 @@ function M.config()
       focusable = true,
       style = "minimal",
       border = "rounded",
-      source = "always",
       header = "",
       prefix = "",
     },
   }
-
-  vim.diagnostic.config(default_diagnostic_config)
-
-  for _, sign in ipairs(vim.tbl_get(vim.diagnostic.config(), "signs", "values") or {}) do
-    vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = sign.name })
-  end
 
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
@@ -161,35 +140,13 @@ function M.config()
       opts = vim.tbl_deep_extend("force", settings, opts)
     end
 
-    if server == "lua_ls" then
-      require("neodev").setup {}
-    end
-
-    if server == "gopls" then
-      opts.filetypes = {
-        "go",
-        "gomod",
-        "gowork",
-        "gotpml",
-      }
-
-      opts.root_dir = util.root_pattern("go.mod", "go.work", ".git")
-    end
-
-    if server == "emmet_ls" then
-      opts.filetypes = {
-        "html",
-        "css",
-        "sass",
-        "scss",
-        "less",
-        "svelte",
-        "php",
-      }
-    end
-
     lspconfig[server].setup(opts)
+
+    if server == "nginx-language-server" then
+      require("lspconfig").nginx_language_server.setup(opts)
+    end
   end
 end
 
 return M
+
