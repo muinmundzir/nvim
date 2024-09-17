@@ -95,7 +95,7 @@ function M.config()
     "yamlls",
     "marksman",
     "tailwindcss",
-    "eslint",
+    "eslint_d",
     "taplo",
     "gopls",
     "templ",
