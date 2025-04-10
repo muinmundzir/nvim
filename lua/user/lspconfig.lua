@@ -57,7 +57,9 @@ function M.common_capabilities()
     lineFoldingOnly = true,
   }
 
-  return capabilities
+  local blink_capabilities = require('blink-cmp').get_lsp_capabilities()
+
+  return blink_capabilities
 end
 
 function M.config()
