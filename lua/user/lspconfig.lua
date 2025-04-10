@@ -99,7 +99,7 @@ function M.config()
     "taplo",
     "gopls",
     "templ",
-    -- "phpactor"
+    "phpactor",
     -- "nginx-language-server",
     -- "rust_analyzer",
   }

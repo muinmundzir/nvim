@@ -97,24 +97,23 @@ function M.config()
       },
     },
     pickers = {
-      live_grep = {
-        theme = "dropdown",
-      },
+      -- live_grep = {
+      --   theme = "dropdown",
+      -- },
 
-      grep_string = {
-        theme = "dropdown",
-      },
+      -- grep_string = {
+      --   theme = "dropdown",
+      -- },
 
       find_files = {
-        theme = "dropdown",
-        previewer = false,
+      --   theme = "dropdown",
+      --   previewer = true,
         path_display = filenameFirst,
       },
 
       buffers = {
         theme = "dropdown",
-        previewer = false,
-        initial_mode = "normal",
+        previewer = true,
         mappings = {
           i = {
             ["<C-d>"] = actions.delete_buffer,
